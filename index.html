@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>i-Meet</title>
+    <!-- <script src="http://localhost:8080/socket.io/socket.io.js"></script> -->
+    <!-- <script src="js/client.js"></script>
+    <link rel="stylesheet" href="css/style.css"> -->
+    <style>
+        .logo {
+            display: block;
+            margin: auto;
+            width: 50px;
+            height: 50px;
+        }
+
+        body {
+            background-color: rgba(19, 1, 1, 0.801);
+            color: aliceblue;
+        }
+
+        .container {
+            background-color: rgb(1, 1, 26);
+            max-width: 955px;
+            margin: auto;
+            height: 60vh;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .message {
+            background-color: rgb(135, 113, 187);
+            padding: 10px;
+            margin: 17px;
+            margin-left: 2px;
+            border: 2px solid;
+            border-radius: 2px;
+        }
+
+        .left {
+            float: left;
+            clear: both;
+        }
+
+        .right {
+            float: right;
+            clear: both;
+        }
+
+        #send-container {
+            text-align: center;
+            display: block;
+            margin: auto;
+            max-width: 955px;
+            width: 100%;
+        }
+
+        #messageInp {
+            width: 92px;
+            border: 2px solid black;
+            border-radius: 4px;
+            height: 34px;
+            width: 500px;
+        }
+
+        .btn {
+            cursor: pointer;
+            border: 2px solid black;
+            border-radius: 4px;
+            height: 34px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <img class="logo" src="chatLogo.png" alt="">
+    </nav>
+    <div id="chatBox" class="container">
+        <div class="message right">Souvik:Hello how are you</div>
+        <div class="message left">Saha:Hi, Iam fine</div>
+    </div>
+    <div class="send">
+        <form action="" id="send-container">
+            <input type="text" name="messageInp" id="messageInp" placeholder="Type your message">
+            <button class="btn">Send</button>
+
+        </form>
+    </div>
+    <script>
+
+    </script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = io();
+
+        const form = document.getElementById('send-container');
+        const messageInput = document.getElementById('messageInp');
+        // const chatbox = document.getElementById('chatBox')
+        const messageContainer = document.querySelector('.container')
+
+        const nameUser = prompt("Enter your name to join the chat");
+        socket.emit('new-user-joined', nameUser);
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const message = messageInput.value;
+
+            append(`You:${message}`, 'right');
+            socket.emit('send', message);
+
+            messageInput.value = "";
+        })
+
+        const append = (message, posation) => {
+            const messageElement = document.createElement('div');
+            messageElement.innerText = message;
+            messageElement.classList.add('message');
+            messageElement.classList.add(posation);
+            messageContainer.append(messageElement);
+        };
+
+        socket.on('user-joined', (name) => {
+            append(`${name} joined the chat`, 'right');
+        });
+
+        socket.on('receive', (data) => {
+            append(`${data.message} : ${data.name}`, 'left')
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "i-meet2",
+  "version": "1.0.0",
+  "description": "chat app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "souvik",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.6.1",
+    "socket.oi": "^0.0.1-security.8"
+  }
+}
